@@ -1,0 +1,1 @@
+eval "$(genv shell --init)"

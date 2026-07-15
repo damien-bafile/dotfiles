@@ -1,0 +1,9 @@
+#!/bin/bash
+# Auto-restow all packages before commit to catch any missed files
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+for pkg in */; do
+  pkg="${pkg%/}"
+  [ "$pkg" = "hooks" ] && continue
+  stow --target="$HOME" "$pkg" 2>/dev/null
+done
