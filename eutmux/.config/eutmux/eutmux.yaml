@@ -55,7 +55,7 @@ general:
     - bind-key 'C-j' setw synchronize-panes on
     - bind-key 'C-k' setw synchronize-panes off
     - bind-key 'G' run-shell 'eutmux.tmux -D'
-    - bind-key 'S' run-shell 'tmux source ~/.tmux.conf'
+    - bind-key 'S' run-shell 'tmux source ~/.config/tmux/tmux.conf'
     - bind-key 'T' run-shell 'eutmux.tmux -T ""'
     - bind-key 'a' display-popup 'eutmux.tmux -a'
     - bind-key 'g' run-shell 'eutmux.tmux -d'
