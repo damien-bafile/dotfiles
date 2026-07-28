@@ -58,6 +58,7 @@ This function should only modify configuration layer settings."
      major-modes
      platformio
      rust
+     zig
      python)
 
 
@@ -599,9 +600,9 @@ This function is called at the very end of Spacemacs initialization."
    ;; If there is more than one, they won't work right.
    '(package-selected-packages
      '(ace-link aggressive-indent all-the-icons auto-compile auto-highlight-symbol
-                auto-yasnippet avy-jump-helm-line browse-at-remote
+                auto-yasnippet avy-jump-helm-line browse-at-remote bui
                 centered-cursor-mode clean-aindent-mode column-enforce-mode
-                define-word devdocs diff-hl diminish dired-quick-sort
+                dap-mode define-word devdocs diff-hl diminish dired-quick-sort
                 disable-mouse dotenv-mode drag-stuff dumb-jump eat edit-indirect
                 elisp-def elisp-demos elisp-slime-nav emr esh-help
                 eshell-prompt-extras eshell-z eval-sexp-fu evil-anzu evil-args
@@ -619,14 +620,14 @@ This function is called at the very end of Spacemacs initialization."
                 helm-projectile helm-purpose helm-swoop helm-xref hide-comnt
                 highlight-indentation highlight-numbers highlight-parentheses
                 hl-todo holy-mode htmlize hungry-delete hybrid-mode indent-guide
-                info+ inspector link-hint lorem-ipsum lsp-origami lsp-treemacs
-                lsp-ui macrostep markdown-toc multi-line multi-term multi-vterm
-                mwim nameless open-junk-file org-cliplink org-contrib org-download
-                org-mime org-pomodoro org-present org-projectile org-rich-yank
-                org-superstar orgit-forge overseer page-break-lines paradox
-                password-generator pcre2el popwin quickrun rainbow-delimiters
-                restart-emacs shell-pop smeargle space-doc spaceline
-                spacemacs-purpose-popwin spacemacs-whitespace-cleanup
+                info+ inspector link-hint lorem-ipsum lsp-docker lsp-origami
+                lsp-treemacs lsp-ui macrostep markdown-toc multi-line multi-term
+                multi-vterm mwim nameless open-junk-file org-cliplink org-contrib
+                org-download org-mime org-pomodoro org-present org-projectile
+                org-rich-yank org-superstar orgit-forge overseer page-break-lines
+                paradox password-generator pcre2el popwin quickrun
+                rainbow-delimiters restart-emacs shell-pop smeargle space-doc
+                spaceline spacemacs-purpose-popwin spacemacs-whitespace-cleanup
                 string-edit-at-point string-inflection symbol-overlay symon
                 term-cursor terminal-here toc-org treemacs-evil
                 treemacs-icons-dired treemacs-magit treemacs-persp

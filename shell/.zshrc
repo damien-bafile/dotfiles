@@ -39,3 +39,8 @@ fi
 if [[ -f "$HOME/.zshrc_$(uname)" ]]; then
   source "$HOME/.zshrc_$(uname)"
 fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/daimyo/.lmstudio/bin"
+# End of LM Studio CLI section
+
