@@ -9,3 +9,4 @@ fi
 export PATH="$PATH:/Users/daimyo/.lmstudio/bin"
 # End of LM Studio CLI section
 
+. "$HOME/.cargo/env"

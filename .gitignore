@@ -1,2 +1,4 @@
 .DS_Store
 nvim/.config/nvim/lazy-lock.json
+emacs/.spacemacs.env
+tmux/.config/tmux/plugins/

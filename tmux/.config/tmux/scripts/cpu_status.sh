@@ -6,7 +6,7 @@ CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="${CURRENT_DIR}/../plugins/tmux-cpu-mem-monitor"
 
 # Get CPU percentage and convert to integer
-cpu_float=$("${PLUGIN_DIR}/venv/bin/python" "${PLUGIN_DIR}/src/cpu.py" | sed 's/%//')
+cpu_float=$(python3 "${PLUGIN_DIR}/src/cpu.py" | sed 's/%//')
 cpu=$(printf "%.0f" "$cpu_float")
 
 # Output with icon and percentage in the same color
