@@ -1,5 +1,5 @@
 {
-  "model": "opus",
+  "agentPushNotifEnabled": true,
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
@@ -7,11 +7,25 @@
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
       "source": {
-        "source": "github",
-        "repo": "obra/superpowers-marketplace"
+        "repo": "obra/superpowers-marketplace",
+        "source": "github"
       }
     }
   },
-  "theme": "dark",
-  "agentPushNotifEnabled": true
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash '/Users/daimyo/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
+  "model": "opus",
+  "theme": "dark"
 }

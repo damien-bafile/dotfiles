@@ -577,7 +577,8 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  )
+  (when (eq system-type 'darwin)
+    (setenv "MACOSX_DEPLOYMENT_TARGET" "14.0")))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
