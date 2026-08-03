@@ -2,3 +2,10 @@
 nvim/.config/nvim/lazy-lock.json
 emacs/.spacemacs.env
 tmux/.config/tmux/plugins/
+herdr/.config/herdr/plugins/
+herdr/.config/herdr/*.log
+herdr/.config/herdr/*.sock
+herdr/.config/herdr/session.json
+herdr/.config/herdr/.plugins.lock
+ruster/.config/ruster/sessions/
+ruster/.config/ruster/recent-projects

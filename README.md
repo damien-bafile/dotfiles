@@ -14,7 +14,10 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 ├── emacs/      → ~/.spacemacs, .spacemacs.env
 ├── tmux/       → ~/.config/tmux/
 ├── ghostty/    → ~/.config/ghostty/
+├── herdr/      → ~/.config/herdr/
 ├── ideavim/    → ~/.ideavimrc
+├── lazygit/    → ~/.config/lazygit/
+├── ruster/     → ~/.config/ruster/
 ├── zed/        → ~/.config/zed/
 ├── lsd/        → ~/.config/lsd/
 ├── bat/        → ~/.config/bat/
@@ -35,7 +38,7 @@ Shell configs are split per-platform:
 - `shell/.zshrc_Linux` — Linux-specific paths (template)
 - Same pattern for `.bash_profile`, `.profile`
 
-Ghostty uses its built-in `catppuccin-mocha` theme (no custom theme file needed).
+Ghostty uses a custom `catppuccin-mocha` theme in `themes/` (overrides the built-in).
 
 ## Setup on a new machine
 
