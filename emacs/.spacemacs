@@ -38,6 +38,7 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     (osx :variables osx-command-as 'hyper osx-option-as 'meta osx-control-as 'control osx-function-as nil osx-right-command-as 'left osx-right-option-as 'left osx-right-control-as 'left osx-swap-option-and-command nil)
      auto-completion
      better-defaults
      emacs-lisp
@@ -215,9 +216,9 @@ It should only modify the values of Spacemacs settings."
    ;; package can be defined with `:package', or a theme can be defined with
    ;; `:location' to download the theme package, refer the themes section in
    ;; DOCUMENTATION.org for the full theme specifications.
-    dotspacemacs-themes '(catppuccin
-                          spacemacs-dark
-                          spacemacs-light)
+   dotspacemacs-themes '(catppuccin
+                         spacemacs-dark
+                         spacemacs-light)
 
    ;; SeT the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
