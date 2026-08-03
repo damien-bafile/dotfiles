@@ -5,3 +5,5 @@
 export PATH="$PATH:/Users/daimyo/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+[ -f "/home/daimyo/.ghcup/env" ] && . "/home/daimyo/.ghcup/env" # ghcup-env
