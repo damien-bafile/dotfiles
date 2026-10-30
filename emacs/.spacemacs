@@ -71,7 +71,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(catppuccin-theme)
+   dotspacemacs-additional-packages '(catppuccin-theme telega)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -587,6 +587,11 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; Telegram client. TDLib comes from Void's libtd-devel in /usr; telega
+  ;; builds its telega-server helper against it on first run (needs make).
+  (setq telega-server-libs-prefix "/usr")
+  (spacemacs/set-leader-keys "act" 'telega)
   )
 
 

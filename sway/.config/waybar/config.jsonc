@@ -14,9 +14,9 @@
         "custom/media"
     ],
     "modules-center": [
+        "mpd"
     ],
     "modules-right": [
-        "mpd",
         "idle_inhibitor",
         "power-profiles-daemon",
         "cpu",
