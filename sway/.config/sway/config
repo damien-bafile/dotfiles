@@ -68,6 +68,9 @@ output eDP-1 scale 1.5
     # Start a terminal
     bindsym $mod+Return exec $term
 
+    # Start the file manager
+    bindsym $mod+y exec $term -e yazi
+
     # Kill focused window
     bindsym $mod+Shift+q kill
 

@@ -28,6 +28,7 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 ├── mise/       → ~/.config/mise/
 ├── opencode/   → ~/.config/opencode/
 ├── kitty/      → ~/.config/kitty/
+├── yazi/       → ~/.config/yazi/   (catppuccin-mocha flavor via `ya pkg`)
 ├── sway/       → ~/.config/{sway,waybar,wofi,mako}/   (Linux only)
 └── theme/      → ~/.config/{gtk-3.0,gtk-4.0,qt5ct,qt6ct,Kvantum}/, qt-env.sh   (Linux only)
 ```
