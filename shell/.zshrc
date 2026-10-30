@@ -157,9 +157,9 @@ __precmd() {
         unset __cmd_started
     fi
     if [[ -n $elapsed ]] && (( elapsed >= 1 )); then
-        RPROMPT="%F{yellow}${elapsed%.*}s%f"
+        RPROMPT="%F{#74c7ec}${elapsed%.*}s%f"
     else
-        RPROMPT='%F{242}%D{%H:%M}'
+        RPROMPT='%F{#74c7ec}%D{%H:%M}%f'
     fi
 }
 __preexec() { __cmd_started=$EPOCHREALTIME }
@@ -167,7 +167,7 @@ add-zsh-hook precmd __precmd
 add-zsh-hook preexec __preexec
 
 PROMPT='${__venv}%F{green}%n%f@%F{green}%m%f %F{blue}%~%f${vcs_info_msg_0_}
-%(?.%F{green}%B❯%f%b.%F{red}%B❯%f%b) '
+%(?.%F{#74c7ec}%B❯%f%b.%F{red}%B❯%f%b) '
 
 # --- 5. Aliases ------------------------------------------------------------
 
