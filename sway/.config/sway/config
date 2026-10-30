@@ -65,8 +65,9 @@ output eDP-1 scale 1.5
 #
 # Basics:
 #
-    # Start a terminal
-    bindsym $mod+Return exec $term
+    # Start a terminal running tmux (Shift for a plain terminal)
+    bindsym $mod+Return exec $term -e tmux
+    bindsym $mod+Shift+Return exec $term
 
     # Start the file manager
     bindsym $mod+y exec $term -e yazi
