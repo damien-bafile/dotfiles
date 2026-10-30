@@ -15,52 +15,11 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     },
-    "blender": {
-      "type": "local",
-      "command": [
-        "uvx",
-        "blender-mcp"
-      ]
-    },
-    "mcp-mermaid": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "mcp-mermaid"
-      ]
-    },
-    "drawio": {
-      "type": "local",
-      "command": [
-        "npx",
-        "-y",
-        "@drawio/mcp"
-      ]
-    },
-    "unityMCP": {
-      "type": "local",
-      "command": [
-        "/opt/homebrew/bin/uvx",
-        "--from",
-        "mcpforunityserver==9.6.8",
-        "mcp-for-unity",
-        "--transport",
-        "stdio"
-      ],
-      "enabled": true
-    },
     "pdf-reader": {
       "type": "local",
       "command": [
         "npx",
         "@sylphx/pdf-reader-mcp"
-      ]
-    },
-    "kicad-mcp": {
-      "type": "local",
-      "command": [
-        "kicad-mcp-server"
       ]
     }
   },
