@@ -1,9 +1,6 @@
-. "$HOME/.cargo/env"
-[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env" # ghcup-env
 
 # Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/daimyo/.lmstudio/bin"
+[ -d "$HOME/.lmstudio/bin" ] && export PATH="$PATH:$HOME/.lmstudio/bin"
 # End of LM Studio CLI section
-
-
-[ -f "/home/daimyo/.ghcup/env" ] && . "/home/daimyo/.ghcup/env" # ghcup-env
