@@ -27,13 +27,18 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 ├── gh/         → ~/.config/gh/
 ├── mise/       → ~/.config/mise/
 ├── opencode/   → ~/.config/opencode/
-├── claude/     → ~/.claude/
-├── fish/       → ~/.config/fish/
-└── eutmux/     → ~/.config/eutmux/
+├── kitty/      → ~/.config/kitty/
+├── sway/       → ~/.config/{sway,waybar,wofi,mako}/   (Linux only)
+└── theme/      → ~/.config/{gtk-3.0,gtk-4.0,qt5ct,qt6ct,Kvantum}/, qt-env.sh   (Linux only)
 ```
 
+`sway/` and `theme/` are Linux desktop configs; don't stow them on macOS.
+
+`gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
+gitignored, so `gh auth login` writes it as a plain local file.
+
 Shell configs are split per-platform:
-- `shell/.zshrc` — shared core (oh-my-zsh, plugins, aliases)
+- `shell/.zshrc` — self-contained core (no plugin manager); machine-specific bits go in an untracked `~/.zshrc.local`
 - `shell/.zshrc_Darwin` — macOS-specific paths
 - `shell/.zshrc_Linux` — Linux-specific paths (template)
 - Same pattern for `.bash_profile`, `.profile`

@@ -9,3 +9,4 @@ herdr/.config/herdr/session.json
 herdr/.config/herdr/.plugins.lock
 ruster/.config/ruster/sessions/
 ruster/.config/ruster/recent-projects
+gh/.config/gh/hosts.yml
