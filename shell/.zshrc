@@ -143,8 +143,8 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:git:*' unstagedstr '*'
 zstyle ':vcs_info:git:*' stagedstr '+'
-zstyle ':vcs_info:git:*' formats       ' %F{242}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f'
-zstyle ':vcs_info:git:*' actionformats ' %F{242}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f %F{red}(%a)%f'
+zstyle ':vcs_info:git:*' formats       ' %F{#cdd6f4}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f'
+zstyle ':vcs_info:git:*' actionformats ' %F{#cdd6f4}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f %F{red}(%a)%f'
 
 __precmd() {
     vcs_info
@@ -166,7 +166,7 @@ __preexec() { __cmd_started=$EPOCHREALTIME }
 add-zsh-hook precmd __precmd
 add-zsh-hook preexec __preexec
 
-PROMPT='${__venv}%F{green}%n%f@%F{green}%m%f %F{blue}%~%f${vcs_info_msg_0_}
+PROMPT='${__venv}%F{green}%n%f%F{#cdd6f4}@%f%F{green}%m%f %F{#74c7ec}%~%f${vcs_info_msg_0_}
 %(?.%F{#74c7ec}%B❯%f%b.%F{red}%B❯%f%b) '
 
 # --- 5. Aliases ------------------------------------------------------------
@@ -288,6 +288,10 @@ fi
 
 # Plugins must load after compinit. Installed via e.g. `xbps-install
 # zsh-syntax-highlighting zsh-autosuggestions`.
+# Catppuccin Mocha colours for both; the highlighting theme must be set first.
+[[ -r ~/.config/zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh ]] \
+    && source ~/.config/zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6c7086'
 for _f in /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
           /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \
           /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
