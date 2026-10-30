@@ -143,8 +143,8 @@ zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:git:*' unstagedstr '*'
 zstyle ':vcs_info:git:*' stagedstr '+'
-zstyle ':vcs_info:git:*' formats       ' %F{#cdd6f4}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f'
-zstyle ':vcs_info:git:*' actionformats ' %F{#cdd6f4}on%f %F{magenta}%b%f%F{red}%u%F{green}%c%f %F{red}(%a)%f'
+zstyle ':vcs_info:git:*' formats       ' %F{#cdd6f4}on%f %F{#74c7ec}%b%f%F{red}%u%F{green}%c%f'
+zstyle ':vcs_info:git:*' actionformats ' %F{#cdd6f4}on%f %F{#74c7ec}%b%f%F{red}%u%F{green}%c%f %F{red}(%a)%f'
 
 __precmd() {
     vcs_info
@@ -171,13 +171,7 @@ PROMPT='${__venv}%F{green}%n%f%F{#cdd6f4}@%f%F{green}%m%f %F{#74c7ec}%~%f${vcs_i
 
 # --- 5. Aliases ------------------------------------------------------------
 
-if (( $+commands[eza] )); then
-    alias ls='eza --group-directories-first --icons=auto'
-    alias l='eza -lah --group-directories-first --icons=auto --git'
-    alias la='l'
-    alias ll='l'
-    alias lt='eza --tree --level=2 --icons=auto'
-elif (( $+commands[lsd] )); then
+if (( $+commands[lsd] )); then
     alias ls='lsd'
     alias l='lsd -lah'
     alias la='l'
