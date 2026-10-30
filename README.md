@@ -59,7 +59,12 @@ pacman -S stow           # Arch
 # Stow all packages
 cd ~/.dotfiles
 for pkg in */; do
-  stow --target=$HOME "${pkg%/}"
+  pkg="${pkg%/}"
+  # sway and theme are Linux desktop configs
+  if [ "$(uname)" = Darwin ] && { [ "$pkg" = sway ] || [ "$pkg" = theme ]; }; then
+    continue
+  fi
+  stow --target=$HOME "$pkg"
 done
 ```
 
