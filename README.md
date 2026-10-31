@@ -35,6 +35,13 @@ Each top-level directory is a stow "package" mirroring `$HOME`:
 
 `sway/` and `theme/` are Linux desktop configs; don't stow them on macOS.
 
+The cursor theme isn't tracked (12 MB of images). On a new Linux machine:
+
+```bash
+gh release download v2.0.0 -R catppuccin/cursors -p catppuccin-mocha-light-cursors.zip
+unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
+```
+
 `gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
 gitignored, so `gh auth login` writes it as a plain local file.
 

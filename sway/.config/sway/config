@@ -27,6 +27,9 @@ font pango:FiraCode Nerd Font 10
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * bg #1e1e2e solid_color
 output eDP-1 scale 1.5
+
+# Cursor (Catppuccin Mocha Light, installed in ~/.local/share/icons)
+seat seat0 xcursor_theme catppuccin-mocha-light-cursors 24
 #
 # Example configuration:
 #
