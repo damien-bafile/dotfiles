@@ -60,6 +60,10 @@ seat seat0 xcursor_theme catppuccin-mocha-light-cursors 24
 #       natural_scroll enabled
 #       middle_emulation enabled
 #   }
+
+input type:touchpad {
+    tap enabled
+}
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
