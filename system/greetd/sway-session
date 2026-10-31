@@ -1,0 +1,7 @@
+#!/bin/sh
+# Start sway from greetd through a zsh login shell, so /etc/profile and
+# ~/.zprofile (qt-env.sh etc.) are loaded the way ly's setup.sh did.
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=sway
+export XDG_CURRENT_DESKTOP=sway
+exec zsh -l -c 'exec sway'

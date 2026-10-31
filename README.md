@@ -51,6 +51,15 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
 - `system/papirus/` — recolours Papirus-Dark folders to Catppuccin Mocha
   Sapphire (catppuccin/papirus-folders). Run `sudo sh system/papirus/install.sh`,
   and again after a Papirus update resets the colour.
+- `system/greetd/` — greetd + tuigreet login on tty2 (replaces ly). Run
+  `sudo sh system/greetd/install.sh` from a text console (Ctrl+Alt+F1), since
+  stopping the old display manager ends the running session. Its `run` makes
+  greetd wait for dbus and elogind; a greetd package update overwrites it, so
+  rerun the script after updating.
+- `system/networkmanager/` — moves Wi-Fi from the wpa_supplicant + dhcpcd
+  services to NetworkManager so nm-applet and `nmtui` work, and adds you to the
+  `network` group. Run `sudo sh system/networkmanager/install.sh`, then
+  reconnect with `nmtui`.
 
 `gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
 gitignored, so `gh auth login` writes it as a plain local file.

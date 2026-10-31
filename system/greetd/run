@@ -1,0 +1,9 @@
+#!/bin/sh
+# /etc/sv/greetd/run (installed by system/greetd/install.sh)
+# Wait for dbus and elogind, like Void's elogind service waits for dbus.
+# Otherwise greetd's PAM session D-Bus-activates elogind outside runit, and
+# runit's own elogind service then loops on "already running".
+exec 2>&1
+sv check dbus >/dev/null || exit 1
+sv check elogind >/dev/null || exit 1
+exec greetd

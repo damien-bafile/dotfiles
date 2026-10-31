@@ -1,0 +1,9 @@
+# /etc/greetd/config.toml (installed by system/greetd/install.sh)
+
+[terminal]
+# Same VT ly used; no agetty runs on tty2
+vt = 2
+
+[default_session]
+user = "_greeter"
+command = "tuigreet --time --remember --asterisks --cmd /etc/greetd/sway-session --theme 'border=magenta;title=magenta;text=white;time=cyan;greet=cyan;prompt=cyan;input=white;action=blue;button=magenta'"
