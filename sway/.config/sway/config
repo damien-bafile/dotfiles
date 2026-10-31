@@ -224,6 +224,9 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 exec waybar
 
+# Sound: pipewire starts wireplumber and pipewire-pulse via ~/.config/pipewire/pipewire.conf.d
+exec pipewire
+
 
 include /etc/sway/config.d/*
 
@@ -240,6 +243,8 @@ client.placeholder      #11111b #11111b #cdd6f4 #11111b #11111b
 bindsym Print exec grim -g "$(slurp)" - | swappy -f -
 bindsym Shift+Print exec grim - | swappy -f -
 bindsym Ctrl+Print exec grimshot copy window
+# Click a window to capture it, then edit/copy/save in swappy
+bindsym $mod+Shift+w exec grimshot save window - | swappy -f -
 
 # Tray applets
 exec blueman-applet
