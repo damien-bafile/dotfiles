@@ -108,6 +108,8 @@ input type:touchpad {
 
     # Power menu (shutdown, reboot, suspend, lock, logout)
     bindsym $mod+Mod1+p exec $HOME/.local/bin/power-menu.sh
+    # Power profile (TLP): performance / balanced / power saver
+    bindsym $mod+Shift+p exec $HOME/.local/bin/power-profile-menu.sh
     bindsym --locked XF86PowerOff exec $HOME/.local/bin/power-menu.sh
 #
 # Moving around:

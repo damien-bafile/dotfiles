@@ -10,8 +10,7 @@
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
-        "mpd",
-        "custom/media"
+        "mpd"
     ],
     "modules-center": [
     ],
@@ -22,7 +21,6 @@
         "memory",
         "battery",
         "custom/battery-usage",
-        "battery#bat2",
         "pulseaudio",
         "clock",
         "tray",
@@ -143,6 +141,7 @@
       "format": "{icon}",
       "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
       "tooltip": true,
+      "on-click": "$HOME/.local/bin/power-profile-menu.sh",
       "format-icons": {
         "default": "",
         "performance": "",

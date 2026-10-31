@@ -71,6 +71,10 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
 - `system/socklog/` — service logs via socklog (`socklog-unix` + `nanoklogd`),
   and adds you to the `socklog` group. Run `sudo sh system/socklog/install.sh`,
   log in again, then read logs with `svlogtail` (e.g. `svlogtail -f daemon`).
+- `system/tlp/` — laptop power management: TLP with its defaults (battery
+  settings switch on unplug) plus `tlp-pd`, which makes the waybar
+  power-profiles module work as a profile switcher. Run
+  `sudo sh system/tlp/install.sh`; check with `sudo tlp-stat -s`.
 
 `mpd/` keeps its database, log and playlists in `~/.local/state/mpd`. The audio
 output is per machine: copy `mpd/.config/mpd/output.conf.example` to
