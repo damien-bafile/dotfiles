@@ -4,7 +4,6 @@ font=FiraCode Nerd Font
 indicator-radius=100
 indicator-thickness=10
 show-failed-attempts
-ignore-empty-password
 
 # Idle / typing
 inside-color=1e1e2e
