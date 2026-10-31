@@ -78,6 +78,7 @@ input type:touchpad {
 
     # Start the file manager
     bindsym $mod+y exec $term -e yazi
+    bindsym $mod+n exec thunar
 
     # Kill focused window
     bindsym $mod+q kill
