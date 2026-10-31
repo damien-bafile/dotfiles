@@ -48,6 +48,9 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
   1.5x with a 24px FiraCode font for the Framework's 2256x1504 panel. Install
   with `sudo sh system/grub/install.sh`; it backs up `/etc/default/grub` to
   `/etc/default/grub.bak-catppuccin` before setting `GRUB_THEME`.
+- `system/papirus/` — recolours Papirus-Dark folders to Catppuccin Mocha
+  Sapphire (catppuccin/papirus-folders). Run `sudo sh system/papirus/install.sh`,
+  and again after a Papirus update resets the colour.
 
 `gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
 gitignored, so `gh auth login` writes it as a plain local file.
