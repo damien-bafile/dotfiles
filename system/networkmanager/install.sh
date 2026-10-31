@@ -17,5 +17,10 @@ usermod -aG network "$USER_NAME"
 rm -f /var/service/dhcpcd /var/service/wpa_supplicant
 ln -sfn /etc/sv/NetworkManager /var/service/NetworkManager
 
+# Let NetworkManager write /etc/resolv.conf directly (see rc-manager.conf)
+HERE=$(cd "$(dirname "$0")" && pwd)
+install -D -m 644 "$HERE/rc-manager.conf" /etc/NetworkManager/conf.d/rc-manager.conf
+nmcli general reload conf,dns-rc 2>/dev/null || true
+
 echo "NetworkManager enabled. Connect with: nmtui  (or the tray icon)"
 echo "Undo: rm /var/service/NetworkManager; ln -s /etc/sv/dhcpcd /etc/sv/wpa_supplicant /var/service/"

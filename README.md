@@ -68,6 +68,9 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
   resume module, plus `mem_sleep_default=deep` for better suspend battery life.
   Run `sudo sh system/hibernate/install.sh` (optional size arg, e.g. `48g`),
   reboot, then test with `loginctl hibernate`.
+- `system/socklog/` — service logs via socklog (`socklog-unix` + `nanoklogd`),
+  and adds you to the `socklog` group. Run `sudo sh system/socklog/install.sh`,
+  log in again, then read logs with `svlogtail` (e.g. `svlogtail -f daemon`).
 
 `mpd/` keeps its database, log and playlists in `~/.local/state/mpd`. The audio
 output is per machine: copy `mpd/.config/mpd/output.conf.example` to
