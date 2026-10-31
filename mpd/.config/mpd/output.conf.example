@@ -1,0 +1,13 @@
+# Copy to output.conf (untracked) and keep the block for this machine.
+
+# Linux (PipeWire)
+audio_output {
+    type    "pipewire"
+    name    "PipeWire"
+}
+
+# macOS
+#audio_output {
+#    type    "osx"
+#    name    "CoreAudio"
+#}

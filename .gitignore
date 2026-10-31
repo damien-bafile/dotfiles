@@ -10,3 +10,5 @@ herdr/.config/herdr/.plugins.lock
 ruster/.config/ruster/sessions/
 ruster/.config/ruster/recent-projects
 gh/.config/gh/hosts.yml
+mpd/.config/mpd/output.conf
+mpd/.config/mpd/log

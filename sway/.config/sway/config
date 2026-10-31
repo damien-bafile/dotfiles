@@ -227,6 +227,8 @@ exec waybar
 
 # Sound: pipewire starts wireplumber and pipewire-pulse via ~/.config/pipewire/pipewire.conf.d
 exec pipewire
+# Music: mpd as this user (~/.config/mpd/mpd.conf), so it can use PipeWire
+exec mpd
 
 
 include /etc/sway/config.d/*
