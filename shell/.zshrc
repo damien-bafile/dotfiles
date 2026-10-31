@@ -102,6 +102,15 @@ bindkey '^[^[[C'  forward-word
 bindkey '^[b'     backward-word
 bindkey '^[f'     forward-word
 
+# Ctrl+Backspace (kitty sends ^W) deletes a small word, stopping at / and .
+# Alt+Backspace deletes back to the previous space (the whole path/argument)
+autoload -Uz backward-kill-word-match
+zle -N backward-kill-space-word backward-kill-word-match
+zstyle ':zle:backward-kill-space-word' word-style whitespace
+bindkey '^[^?' backward-kill-space-word
+# Ctrl+Alt+Backspace (kitty sends Esc ^H) deletes everything before the cursor
+bindkey '^[^H' backward-kill-line
+
 # --- 3. Completion ---------------------------------------------------------
 
 zmodload -i zsh/complist
