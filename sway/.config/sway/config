@@ -245,6 +245,20 @@ client.urgent           #f38ba8 #f38ba8 #1e1e2e #f38ba8 #f38ba8
 client.placeholder      #11111b #11111b #cdd6f4 #11111b #11111b
 
 
+# Media keys (work on the lock screen too)
+# Volume: PipeWire default output, capped at 100%
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+# Playback: MPRIS players (Firefox, etc.) via playerctl, else mpd via rmpc
+bindsym --locked XF86AudioPlay exec playerctl play-pause || rmpc togglepause
+bindsym --locked XF86AudioNext exec playerctl next || rmpc next
+bindsym --locked XF86AudioPrev exec playerctl previous || rmpc prev
+# Screen brightness
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+
 # Screenshots (grimshot)
 bindsym Print exec grim -g "$(slurp)" - | swappy -f -
 bindsym Shift+Print exec grim - | swappy -f -
