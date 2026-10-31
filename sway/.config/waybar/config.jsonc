@@ -21,7 +21,6 @@
         "power-profiles-daemon",
         "cpu",
         "memory",
-        "backlight",
         "battery",
         "custom/battery-usage",
         "battery#bat2",

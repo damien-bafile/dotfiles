@@ -73,7 +73,7 @@ output eDP-1 scale 1.5
     bindsym $mod+y exec $term -e yazi
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+q kill
 
     # Start your launcher
     bindsym $mod+d exec $HOME/.local/bin/wofi-launcher.sh
