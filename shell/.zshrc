@@ -285,6 +285,9 @@ fi
 # Catppuccin Mocha colours for both; the highlighting theme must be set first.
 [[ -r ~/.config/zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh ]] \
     && source ~/.config/zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
+# Path separators in the same colour as the path (the theme makes them red)
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#cdd6f4,underline'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#cdd6f4,underline'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#6c7086'
 for _f in /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
           /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh \

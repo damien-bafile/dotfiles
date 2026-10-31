@@ -42,6 +42,13 @@ gh release download v2.0.0 -R catppuccin/cursors -p catppuccin-mocha-light-curso
 unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
 ```
 
+`system/` is not a stow package. It holds files that live outside `$HOME`:
+
+- `system/grub/` — Catppuccin Mocha GRUB theme (from catppuccin/grub), scaled
+  1.5x with a 24px FiraCode font for the Framework's 2256x1504 panel. Install
+  with `sudo sh system/grub/install.sh`; it backs up `/etc/default/grub` to
+  `/etc/default/grub.bak-catppuccin` before setting `GRUB_THEME`.
+
 `gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
 gitignored, so `gh auth login` writes it as a plain local file.
 
@@ -68,6 +75,8 @@ pacman -S stow           # Arch
 cd ~/.dotfiles
 for pkg in */; do
   pkg="${pkg%/}"
+  # system/ holds files for outside $HOME, installed by hand (see above)
+  [ "$pkg" = system ] && continue
   # sway and theme are Linux desktop configs
   if [ "$(uname)" = Darwin ] && { [ "$pkg" = sway ] || [ "$pkg" = theme ]; }; then
     continue

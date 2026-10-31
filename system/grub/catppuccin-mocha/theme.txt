@@ -1,0 +1,52 @@
+# Catppuccin Mocha GRUB theme (catppuccin/grub), scaled 1.5x for a
+# 2256x1504 panel. The font placeholder below is replaced with the generated
+# font's name by install.sh.
+
+# Global Property
+title-text: ""
+desktop-image: "background.png"
+desktop-image-scale-method: "stretch"
+desktop-color: "#1E1E2E"
+terminal-font: "@FONT@"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
+# Logo image
++ image {
+  left = 50%-50
+  top = 50%-150
+  file = "logo.png"
+}
+
+# Show the boot menu
++ boot_menu {
+  left = 50%-360
+  top = 55%
+  width = 720
+  height = 30%
+  item_font = "@FONT@"
+  item_color = "#CDD6F4"
+  selected_item_color = "#CDD6F4"
+  icon_width = 48
+  icon_height = 48
+  item_icon_space = 30
+  item_height = 54
+  item_padding = 8
+  item_spacing = 15
+  selected_item_pixmap_style = "select_*.png"
+}
+
+# Show a countdown message using the label component
++ label {
+  top = 88%
+  left = 25%
+  width = 50%
+  align = "center"
+  id = "__timeout__"
+  text = "Booting in %d seconds"
+  font = "@FONT@"
+  color = "#CDD6F4"
+}
