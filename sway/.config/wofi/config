@@ -1,2 +1,4 @@
 key_up=Ctrl-p
 key_down=Ctrl-n
+allow_images=true
+image_size=24
