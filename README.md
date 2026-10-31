@@ -60,6 +60,9 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
   services to NetworkManager so nm-applet and `nmtui` work, and adds you to the
   `network` group. Run `sudo sh system/networkmanager/install.sh`, then
   reconnect with `nmtui`.
+- `system/console/` — Catppuccin Mocha palette for the Linux console and
+  tuigreet (catppuccin/tty kernel options). Run `sudo sh system/console/install.sh`
+  and reboot; it keeps your other boot options and backs up `/etc/default/grub`.
 
 `gh/` only tracks `config.yml`. `hosts.yml` holds the GitHub auth token and is
 gitignored, so `gh auth login` writes it as a plain local file.
