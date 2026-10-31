@@ -63,6 +63,11 @@ unzip catppuccin-mocha-light-cursors.zip -d ~/.local/share/icons
 - `system/console/` — Catppuccin Mocha palette for the Linux console and
   tuigreet (catppuccin/tty kernel options). Run `sudo sh system/console/install.sh`
   and reboot; it keeps your other boot options and backs up `/etc/default/grub`.
+- `system/hibernate/` — enables hibernation on the btrfs root: a 32 GB swap file
+  in a `/swap` subvolume, `resume=`/`resume_offset=` boot options, dracut's
+  resume module, plus `mem_sleep_default=deep` for better suspend battery life.
+  Run `sudo sh system/hibernate/install.sh` (optional size arg, e.g. `48g`),
+  reboot, then test with `loginctl hibernate`.
 
 `mpd/` keeps its database, log and playlists in `~/.local/state/mpd`. The audio
 output is per machine: copy `mpd/.config/mpd/output.conf.example` to
