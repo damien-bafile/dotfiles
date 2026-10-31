@@ -80,6 +80,9 @@ input type:touchpad {
     bindsym $mod+y exec $term -e yazi
     bindsym $mod+n exec thunar
 
+    # Music player
+    bindsym $mod+m exec $term -e rmpc
+
     # Kill focused window
     bindsym $mod+q kill
 
