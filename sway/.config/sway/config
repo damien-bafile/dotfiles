@@ -65,8 +65,8 @@ output eDP-1 scale 1.5
 #
 # Basics:
 #
-    # Start a terminal running tmux (Shift for a plain terminal)
-    bindsym $mod+Return exec $term -e tmux
+    # Start a terminal attached to the "main" tmux session (Shift for a plain terminal)
+    bindsym $mod+Return exec $term -e tmux new-session -A -s main
     bindsym $mod+Shift+Return exec $term
 
     # Start the file manager
