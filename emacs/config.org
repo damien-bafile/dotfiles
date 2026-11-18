@@ -1,0 +1,1135 @@
+* File Header
+#+begin_src emacs-lisp :padline no
+;;; config.el --- Emacs configuration -*- lexical-binding: t -*-
+#+end_src
+
+* Encoding
+#+begin_src emacs-lisp
+(set-language-environment "UTF-8")
+(prefer-coding-system 'utf-8)
+#+end_src
+
+* Package Management
+#+begin_src emacs-lisp
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+#+end_src
+
+* Paths
+#+begin_src emacs-lisp
+(when-let ((cargo-bin (expand-file-name ".cargo/bin" (getenv "HOME"))))
+  (when (file-directory-p cargo-bin)
+    (add-to-list 'exec-path cargo-bin)))
+#+end_src
+
+* Server
+#+begin_src emacs-lisp
+(require 'server)
+(unless (or (daemonp)
+            (server-running-p))
+  (server-start))
+
+(when (daemonp)
+  (defun my/delete-frame-or-kill-emacs ()
+    "Delete frame if more than one exists. Prompt on last frame."
+    (interactive)
+    (if (> (length (frame-list)) 1)
+        (delete-frame)
+      (when (yes-or-no-p "Exit the Emacs daemon? ")
+        (save-buffers-kill-emacs))))
+  (global-set-key (kbd "C-x C-c") #'my/delete-frame-or-kill-emacs))
+#+end_src
+
+* EditorConfig
+#+begin_src emacs-lisp
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+#+end_src
+
+* Envrc
+#+begin_src emacs-lisp
+(use-package envrc
+  :config
+  (envrc-global-mode 1))
+#+end_src
+
+* Theme
+#+begin_src emacs-lisp
+(use-package catppuccin-theme
+  :custom
+  (catppuccin-flavor 'mocha)
+  :config
+  ;; Match the custom VS Code Catppuccin Mocha:
+  ;; black editor background, darker panels, yellow strings
+  (catppuccin-set-color 'base   "#000000")
+  (catppuccin-set-color 'mantle "#050507")
+  (catppuccin-set-color 'crust  "#030304")
+  (load-theme 'catppuccin :no-confirm)
+  ;; Strings render yellow like JSON values in the VS Code theme
+  ;; (tree-sitter string faces inherit this face)
+  (set-face-attribute 'font-lock-string-face nil :foreground "#f9e2af")
+  ;; Higher-contrast selection on the black background
+  ;; Mauve selection (Catppuccin mocha accent)
+  (set-face-attribute 'region nil :background "#cba6f7")
+  ;; No current-line highlight; lavender cursor instead
+  (global-hl-line-mode 0)
+  (set-face-attribute 'cursor nil :background "#b4befe")
+  (with-eval-after-load 'vertico
+    ;; Bold dark text on the lavender selection for high contrast
+    (set-face-attribute 'vertico-current nil
+                        :background "#b4befe"
+                        :foreground "#11111b"
+                        :weight 'bold))
+  ;; Marginalia annotations inherit bright syntax colors that wash out
+  ;; on the lavender selection; a uniform mid-grey reads on both the
+  ;; black background and the selected line
+  (with-eval-after-load 'marginalia
+    (dolist (face (seq-filter
+                   (lambda (f) (string-prefix-p "marginalia-" (symbol-name f)))
+                   (face-list)))
+      (set-face-attribute face nil :inherit nil :foreground "#6c7086"))))
+#+end_src
+
+* Font
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+                    :family "FiraCode Nerd Font"
+                    :height 120
+                    :weight 'normal)
+
+(set-face-attribute 'fixed-pitch nil
+                    :family "FiraCode Nerd Font")
+
+#+end_src
+
+* Modeline
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :config
+  (setq nerd-icons-font-family "FiraCode Nerd Font"))
+
+(use-package doom-modeline
+  :after nerd-icons
+  :hook (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-height 25)
+  (doom-modeline-bar-width 4)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  (doom-modeline-vcs-max-length 24))
+#+end_src
+
+* UI
+#+begin_src emacs-lisp
+(tool-bar-mode     0)
+(scroll-bar-mode   0)
+(menu-bar-mode     0)
+(blink-cursor-mode 0)
+#+end_src
+
+* Golden Ratio
+#+begin_src emacs-lisp
+(use-package golden-ratio
+  :straight t
+  :custom
+  (golden-ratio-auto-scale t)
+  (golden-ratio-inhibit-functions '(minibufferp))
+  :config
+  (golden-ratio-mode 1))
+#+end_src
+
+* Visual
+#+begin_src emacs-lisp
+(winner-mode 1)
+
+(electric-pair-mode 1)
+
+(use-package display-line-numbers
+  :straight nil
+  :hook ((prog-mode . display-line-numbers-mode)
+         (org-mode  . display-line-numbers-mode))
+  :custom
+  (display-line-numbers-type 'relative)
+  (display-line-numbers-width-start t))
+
+(use-package rainbow-delimiters
+  :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
+         (lisp-mode        . rainbow-delimiters-mode)
+         (scheme-mode      . rainbow-delimiters-mode)))
+
+(use-package beacon
+  :custom
+  (beacon-size 20)
+  (beacon-blink-duration 0.3)
+  :config
+  (beacon-mode 1))
+#+end_src
+
+* Undo
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :custom
+  (undo-tree-auto-save-history nil)
+  :config
+  (global-undo-tree-mode 1))
+#+end_src
+
+* Snippets
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
+#+end_src
+
+* Completion
+#+begin_src emacs-lisp
+(use-package company
+  :hook (after-init . global-company-mode)
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.1)
+  (company-backends
+   '((company-capf company-yasnippet)
+     company-files
+     company-dabbrev-code)))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
+#+end_src
+
+* Tree-sitter
+#+begin_src emacs-lisp
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install t)
+  :config
+  (global-treesit-auto-mode))
+#+end_src
+
+* Completion UI
+#+begin_src emacs-lisp
+(use-package vertico
+  :config
+  (vertico-mode 1)
+  (define-key vertico-map (kbd "C-j") #'vertico-next)
+  (define-key vertico-map (kbd "C-k") #'vertico-previous)
+  (define-key vertico-map (kbd "C-h") #'vertico-directory-up)
+  (define-key vertico-map (kbd "C-l") #'vertico-insert))
+
+(setq vertico-sort-function nil)
+
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package consult
+  :after vertico)
+
+(use-package marginalia
+  :config
+  (marginalia-mode 1))
+
+(use-package consult-org-roam
+  :after org-roam
+  :config
+  (consult-org-roam-mode 1))
+#+end_src
+
+* Avy
+#+begin_src emacs-lisp
+(use-package avy
+  :custom
+  (avy-timeout-seconds 0.3))
+#+end_src
+
+* Projectile
+#+begin_src emacs-lisp
+(use-package projectile
+  :custom
+  (projectile-completion-system 'default)
+  (projectile-project-search-path '("~/Dev/"))
+  (projectile-indexing-method 'alien)
+  (projectile-git-untracked-files nil)
+  (projectile-enable-caching t)
+  (projectile-known-projects-file
+   (expand-file-name "projectile-bookmarks.eld" user-emacs-directory))
+  :config
+  (projectile-mode 1))
+
+(use-package consult-projectile
+  :after (consult projectile)
+  :custom
+  (consult-projectile-sources '(consult-projectile--source-projectile-project)))
+#+end_src
+
+* IRC (ERC)
+#+begin_src emacs-lisp
+(use-package erc
+  :straight nil
+  :commands (erc erc-tls)
+  :custom
+  ;; Server defaults (override with C-u before connecting)
+  (erc-server "irc.libera.chat")
+  (erc-port 6697)
+  (erc-nick "daimyo")
+  (erc-user-full-name "daimyo")
+  (erc-use-auth-source t)
+  ;; Display
+  (erc-fill-column 100)
+  (erc-fill-function 'erc-fill-wrap)
+  (erc-fill-prefix "   ")
+  (erc-timestamp-format "%H:%M")
+  (erc-timestamp-only-if-changed-flag t)
+  (erc-insert-timestamp-function 'erc-insert-timestamp-left)
+  ;; Track
+  (erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK"))
+  (erc-track-exclude '("*ERC QI*" "*erc-gnus*"))
+  (erc-track-shorten-names t)
+  (erc-track-use-faces t)
+  (erc-track-faces-priorities
+   '((erc-current-nick-face . erc-track-direct-changed-buffer-face)
+     (default . erc-track-changed-buffer-face)))
+  ;; Behavior
+  (erc-kill-buffer-on-part t)
+  (erc-kill-queries-on-quit t)
+  (erc-kill-server-on-quit nil)
+  (erc-save-buffer-on-part nil)
+  (erc-autojoin-mode t)
+  (erc-autojoin-channels-alist
+   '(("irc.libera.chat" "#emacs" "#clojure" "#rust")))
+  (erc-server-reconnect-attempts 5)
+  (erc-server-reconnect-timeout 3)
+  (erc-prompt-for-nickserv-password nil)
+  ;; TLS
+  (erc-tls-ssl-program "gnutls-cli")
+  (erc-tls-certificate-verification t)
+  :config
+  (erc-modules '(sasl tracking fill button nicks replace
+                 match ring stamp unread))
+  ;; Activity tracking in mode-line
+  (erc-track-mode t))
+
+;; Customn helper functions
+(defun my/erc-tls ()
+  "Connect to IRC via TLS."
+  (interactive)
+  (erc-tls :server erc-server :port erc-port :nick erc-nick))
+
+(defun my/erc-join (channel)
+  "Join CHANNEL on the current server."
+  (interactive "sChannel: ")
+  (erc-send-join (if (string-prefix-p "#" channel) channel (concat "#" channel))))
+
+(defun my/erc-switch-to-input-buffer ()
+  "Switch to the ERC input buffer."
+  (interactive)
+  (let ((input-buf (erc--get-input-buffer)))
+    (when input-buf
+      (switch-to-buffer input-buf)
+      (goto-char (point-max)))))
+
+(defun my/erc-quit-and-bury ()
+  "Quit ERC and bury the buffer."
+  (interactive)
+  (erc-quit-server "Goodbye")
+  (bury-buffer))
+#+end_src
+
+* Dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :after projectile
+    :custom
+    (dashboard-center-content           t)
+    (dashboard-show-shortcuts           nil)
+    (dashboard-set-heading-icons        t)
+    (dashboard-set-file-icons           t)
+    (dashboard-display-icons-p          t)
+    (dashboard-icon-type                'nerd-icons)
+    (dashboard-items                    '((recents  . 5)
+                                           (projects . 5)
+                                           (agenda   . 5)))
+    (dashboard-projects-backend         'projectile)
+    (dashboard-projects-switch-function 'projectile-switch-project-by-name)
+    (dashboard-path-style               'truncate-middle))
+
+  (use-package doom-dashboard
+    :straight (doom-dashboard :host github :repo "emacs-dashboard/doom-dashboard")
+    :after dashboard
+    :demand t
+    :bind
+    (:map dashboard-mode-map
+        ("<remap> <dashboard-previous-line>" . widget-backward)
+        ("<remap> <dashboard-next-line>" . widget-forward)
+        ("<remap> <previous-line>" . widget-backward)
+        ("<remap> <next-line>"  . widget-forward)
+        ("<remap> <right-char>" . widget-forward)
+        ("<remap> <left-char>"  . widget-backward))
+    :config
+    (setq dashboard-startup-banner
+          (expand-file-name "banners/daimyo.txt" user-emacs-directory))
+    (setq dashboard-banner-logo-title "Welcome back, daimyo.")
+    (setq dashboard-footer-messages '("Ready to hack."))
+    (setq dashboard-startupify-list
+          '(dashboard-insert-banner
+  	  dashboard-insert-banner-title
+            dashboard-insert-items
+            doom-dashboard-insert-homepage-footer))
+    (dashboard-setup-startup-hook))
+
+  (add-hook 'server-after-make-frame-hook
+            (lambda ()
+              (dashboard-refresh-buffer)
+              (switch-to-buffer "*dashboard*")))
+#+end_src
+
+* LSP
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :commands lsp
+  :hook ((c-mode         . lsp)
+         (c++-mode       . lsp)
+         (c-ts-mode      . lsp)
+         (c++-ts-mode    . lsp)
+         (php-mode       . lsp)
+         (python-mode    . lsp)
+         (python-ts-mode . lsp)
+         (rust-ts-mode   . lsp))
+  :custom
+  (lsp-prefer-flymake nil)
+  (lsp-diagnostics-provider :flycheck)
+  (lsp-clangd-binary-path (executable-find "clangd"))
+  (lsp-enable-on-type-formatting nil)
+  (lsp-signature-auto-activate nil)
+  :config
+  (add-to-list 'lsp-language-id-configuration '(arduino-mode . "cpp"))
+  (when-let ((pyright (executable-find "pyright-langserver")))
+    (lsp-register-client
+     (make-lsp-client
+      :new-connection (lsp-stdio-connection `(,pyright "--stdio"))
+      :activation-fn (lsp-activate-on "python")
+      :server-id 'pyright
+      :priority 1))))
+
+(use-package lsp-ui
+  :after lsp-mode
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-position 'at-point)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-code-actions t))
+
+;; lsp-flycheck compat for older lsp-mode versions
+(with-eval-after-load 'flycheck
+  (when (not (flycheck-error-level-p 'lsp-flycheck-warning-unnecessary))
+    (defface lsp-flycheck-warning-unnecessary
+      '((t :inherit warning))
+      "Face for unnecessary warnings (older lsp-mode compat)."
+      :group 'lsp-faces)
+    (flycheck-define-error-level 'lsp-flycheck-warning-unnecessary
+      :severity 0
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap 'questionmark
+      :fringe-face 'lsp-flycheck-warning-unnecessary
+      :error-list-face 'lsp-flycheck-warning-unnecessary
+      :compilation-level 2)))
+#+end_src
+
+* Rust
+#+begin_src emacs-lisp
+(use-package rust-mode
+  :straight nil
+  :mode ("\\.rs\\'" . rust-ts-mode))
+
+(use-package cargo-mode
+  :hook (rust-ts-mode . cargo-minor-mode))
+#+end_src
+
+* Syntax Checking
+#+begin_src emacs-lisp
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode)
+  :custom
+  (flycheck-disabled-checkers '(org-lint)))
+#+end_src
+
+* Debugging
+#+begin_src emacs-lisp
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-auto-configure-mode 1)
+  ;; C/C++ debug adapter
+  (when (executable-find "lldb-vscode")
+    (unless (file-exists-p (dap-gdb-lldb--extension-path "lldb"))
+      (dap-gdb-lldb-setup))
+    (setq dap-lldb-debug-program
+          `(,(executable-find "lldb-vscode"))))
+  ;; PHP debug adapter
+  (when (executable-find "node")
+    (require 'dap-php)
+    (setq dap-php-debug-program `(,(executable-find "node"))))
+  ;; Python debug adapter
+  (when (executable-find "debugpy")
+    (require 'dap-python)
+    (setq dap-python-debugger 'debugpy
+          dap-python-executable (executable-find "python"))))
+#+end_src
+
+* TODO
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :hook ((prog-mode . hl-todo-mode)
+           (org-mode  . hl-todo-mode))
+    :custom
+    (hl-todo-keyword-faces
+     '(("TODO"   . "#cc241d")
+       ("FIXME"  . "#d79921")
+       ("HACK"   . "#b16286")
+       ("NOTE"   . "#458588")
+       ("WARN"   . "#d65d0e"))))
+
+#+end_src
+
+* C / C++
+#+begin_src emacs-lisp
+(use-package cc-mode
+  :straight nil
+  :custom
+  (c-basic-offset 4))
+
+(use-package clang-format
+  :custom
+  (clang-format-fallback-style "llvm"))
+
+(dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
+  (add-hook hook (lambda ()
+                   (add-hook 'before-save-hook #'clang-format-buffer nil t))))
+#+end_src
+
+* php
+#+begin_src emacs-lisp
+(use-package php-mode
+  :mode "\\.php\\'"
+  :config
+  (setq php-mode-coding-style 'psr2))
+
+(add-hook 'php-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+
+(use-package web-mode
+  :mode "\\.phtml\\'"
+  :mode "\\.blade\\.php\\'")
+
+#+end_src
+
+* Python
+#+begin_src emacs-lisp
+(add-hook 'python-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+
+(add-hook 'python-ts-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook #'lsp-format-buffer nil t)))
+#+end_src
+
+* Makefile
+#+begin_src emacs-lisp
+(add-hook 'makefile-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode t)))
+#+end_src
+
+* CMake
+#+begin_src emacs-lisp
+(use-package cmake-mode :defer t)
+#+end_src
+
+* Just (Justfiles)
+#+begin_src emacs-lisp
+(use-package just-mode :defer t)
+#+end_src
+
+* Arduino
+#+begin_src emacs-lisp
+(use-package arduino-mode
+  :mode "\\.ino\\'")
+
+(use-package arduino-cli-mode
+  :after arduino-mode
+  :hook (arduino-mode . arduino-cli-mode)
+  :custom
+  (arduino-cli-warnings 'all)
+  (arduino-cli-verify t))
+#+end_src
+
+* PlatformIO
+#+begin_src emacs-lisp
+(use-package platformio-mode
+  :commands (platformio-build platformio-upload platformio-device-monitor
+             platformio-clean platformio-init-update-workspace platformio-boards)
+  :hook (c-mode-common-hook . platformio-conditionally-enable)
+  :custom
+  (platformio-mode-prefix-key "C-c i")
+  :config
+  ;; Auto-link compile_commands.json to project root after builds (clangd needs it there)
+  (add-hook 'platformio-mode-hook
+            (lambda ()
+              (when-let ((root (projectile-project-root)))
+                (add-hook 'compilation-finish-functions
+                          (lambda (_buf msg)
+                            (when (string-match-p "finished" msg)
+                              (let ((cdb (expand-file-name "build/compile_commands.json" root))
+                                    (target (expand-file-name "compile_commands.json" root)))
+                                (when (file-exists-p cdb)
+                                  (condition-case nil
+                                      (progn
+                                        (make-symbolic-link cdb target 'ok-if-already-exists)
+                                        (lsp-workspace-restart nil))
+                                    (error nil))))))
+                          nil t)))))
+#+end_src
+
+* ESP-IDF
+#+begin_src emacs-lisp
+;; ESP-IDF minor mode — no MELPA package exists
+(use-package espidf-mode
+  :straight nil
+  :commands (espidf-mode espidf-build espidf-flash espidf-monitor
+             espidf-menuconfig espidf-clean espidf-reconfigure)
+  :init
+  (defun espidf-build ()
+    (interactive) (compile "idf.py build"))
+  (defun espidf-flash ()
+    (interactive) (compile "idf.py flash"))
+  (defun espidf-monitor ()
+    (interactive) (compile "idf.py monitor"))
+  (defun espidf-menuconfig ()
+    (interactive) (compile "idf.py menuconfig"))
+  (defun espidf-clean ()
+    (interactive) (compile "idf.py fullclean"))
+  (defun espidf-reconfigure ()
+    (interactive) (compile "idf.py reconfigure"))
+
+  (define-minor-mode espidf-mode
+    "ESP-IDF integration."
+    :lighter " ESP-IDF"
+    :keymap (let ((map (make-sparse-keymap)))
+              (define-key map (kbd "C-c e b") #'espidf-build)
+              (define-key map (kbd "C-c e u") #'espidf-flash)
+              (define-key map (kbd "C-c e m") #'espidf-monitor)
+              (define-key map (kbd "C-c e k") #'espidf-menuconfig)
+              (define-key map (kbd "C-c e c") #'espidf-clean)
+              (define-key map (kbd "C-c e r") #'espidf-reconfigure)
+              map)
+    (when espidf-mode
+      (setq-local compile-command "idf.py build")
+      (add-hook 'compilation-finish-functions
+                (lambda (buf msg)
+                  (when-let ((root (projectile-project-root)))
+                    (let ((cdb (expand-file-name "build/compile_commands.json" root))
+                          (target (expand-file-name "compile_commands.json" root)))
+                      (when (and (string-match-p "finished" msg)
+                                 (file-exists-p cdb))
+                        (condition-case nil
+                            (make-symbolic-link cdb target 'ok-if-already-exists)
+                          (error nil))
+                        (ignore-errors (lsp-workspace-restart nil))))))
+                nil t)))
+
+  (defun espidf-conditionally-enable ()
+    (when-let ((root (projectile-project-root)))
+      (when (and (file-exists-p (expand-file-name "CMakeLists.txt" root))
+                 (with-temp-buffer
+                   (insert-file-contents (expand-file-name "CMakeLists.txt" root))
+                   (goto-char (point-min))
+                   (search-forward "project.cmake" nil t)))
+        (espidf-mode 1))))
+
+  :hook (c-mode-common-hook . espidf-conditionally-enable))
+#+end_src
+
+* Dired
+#+begin_src emacs-lisp
+(use-package dired
+  :straight nil
+  :custom
+  (dired-listing-switches "-alh --group-directories-first")
+  (dired-dwim-target t)
+  :config
+  (setq insert-directory-program "ls")
+  :bind (:map dired-mode-map
+              ("C-j" . dired-next-line)
+              ("C-k" . dired-previous-line)
+              ("C-h" . dired-up-directory)
+              ("C-l" . dired-find-file)))
+
+  (use-package nerd-icons-dired
+    :hook (dired-mode . nerd-icons-dired-mode))
+#+end_src
+
+* Buffer Management
+#+begin_src emacs-lisp
+  (use-package ibuffer
+    :straight nil
+    :config
+    (setq ibuffer-saved-filter-groups
+          '(("default"
+             ("Org"      (mode . org-mode))
+             ("Clojure"  (mode . clojure-mode))
+             ("C/C++"    (or (mode . c-mode)
+                             (mode . c++-mode)
+                             (mode . c-ts-mode)
+                             (mode . c++-ts-mode)))
+             ("Arduino"  (mode . arduino-mode))
+             ("Dired"    (mode . dired-mode))
+              ("Terminal" (or (mode . eat-mode) (mode . vterm-mode)))
+             ("Magit"    (name . "^\\*magit"))
+             ("Emacs"    (or (name . "^\\*scratch\\*$")
+                             (name . "^\\*Messages\\*$"))))))
+    (setq magit-repository-directories '(("~/Dev" . 2)))
+    (add-hook 'ibuffer-mode-hook
+              (lambda ()
+                (ibuffer-switch-to-saved-filter-groups "default"))))
+#+end_src
+
+* Terminal
+#+begin_src emacs-lisp
+(defun my/windows-p ()
+  "Return t if running on Windows."
+  (memq system-type '(ms-dos windows-nt cygwin)))
+
+(use-package eat
+  :if (my/windows-p)
+  :custom
+  (eat-kill-buffer-on-exit t)
+  :config
+  (eat-eshell-mode))
+
+(use-package vterm
+  :if (not (my/windows-p))
+  :straight t
+  :custom
+  (vterm-kill-buffer-on-exit t)
+  (vterm-max-scrollback 10000))
+
+(use-package popper
+  :bind (("C-`"   . popper-toggle))
+  :custom
+  (popper-reference-buffers
+   '("\\*\\(eat\\|vterm\\)\\*"
+     "\\*Help\\*"
+     "\\*helpful"
+     flycheck-error-list-mode
+     compilation-mode))
+  :config
+  (popper-mode 1))
+
+(defun my/terminal ()
+  "Start a terminal: vterm on macOS/Linux, eat on Windows."
+  (interactive)
+  (if (my/windows-p) (eat) (vterm)))
+
+(defun my/terminal-bottom ()
+  (interactive)
+  (let ((mode (if (my/windows-p) 'eat-mode 'vterm-mode))
+        (cmd (if (my/windows-p) #'eat #'vterm)))
+    (let ((display-buffer-alist
+           `(((derived-mode . ,mode)
+              (display-buffer-reuse-window display-buffer-at-bottom)
+              (window-height . 0.35))
+             ,@display-buffer-alist)))
+      (funcall cmd))))
+
+(defun my/terminal-left ()
+  (interactive)
+  (let ((cmd (if (my/windows-p) #'eat #'vterm)))
+    (select-window (split-window-right -40))
+    (funcall cmd)))
+
+(defun my/terminal-right ()
+  (interactive)
+  (let ((cmd (if (my/windows-p) #'eat #'vterm)))
+    (select-window (split-window-right 40))
+    (funcall cmd)))
+
+(defun my/terminal-fullscreen ()
+  (interactive)
+  (let ((cmd (if (my/windows-p) #'eat #'vterm)))
+    (delete-other-windows)
+    (funcall cmd)))
+
+(defun my/terminal-project ()
+  (interactive)
+  (if (my/windows-p)
+      (eat-project)
+    (projectile-run-vterm)))
+#+end_src
+
+* Eshell
+#+begin_src emacs-lisp
+;; Per-buffer polish when eshell starts
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (visual-line-mode +1)
+            (goto-address-mode +1)
+            (setq-local cursor-type 'bar
+                        show-trailing-whitespace nil)
+            (local-set-key (kbd "C-l")     #'eshell-bol)
+            (local-set-key (kbd "C-c C-o") #'eshell-kill-output)
+            (local-set-key (kbd "C-c C-l") #'eshell-list-history)
+            (local-set-key (kbd "C-c M-r") #'eshell-reset)
+            (local-set-key (kbd "q")       #'quit-window)))
+
+;; Prompt: short path relative to home, root-aware, highlighted
+(setq eshell-prompt-function
+      (lambda ()
+        (concat
+         (propertize
+          (concat
+           (let ((dir (eshell/pwd)))
+             (if (string= dir "~")
+                 "~"
+               (file-relative-name dir "~")))
+           (if (= (user-uid) 0) " # " " $ "))
+          'face 'font-lock-function-name-face)))
+      eshell-prompt-regexp "^[^#$\n]* [#$] "
+      eshell-highlight-prompt t
+      eshell-history-size 1000
+      eshell-list-files-after-cd t
+      eshell-cmpl-cycle-completions nil
+      eshell-save-history-on-exit t)
+#+end_src
+
+* Multimedia
+#+begin_src emacs-lisp
+(use-package emms
+  :straight t
+  :custom
+  (emms-source-file-default-directory "~/Music/Library/")
+  :config
+  (require 'emms-setup)
+  (emms-all)
+  (emms-default-players)
+  (setq emms-player-list '(emms-player-mpv)
+        emms-player-mpv-command-name "mpv"
+        emms-source-file-directory-tree-function
+        'emms-source-file-directory-tree-internal)
+)
+#+end_src
+
+* Podcasts
+#+begin_src emacs-lisp
+(use-package podcaster
+  :straight t
+  :commands podcaster
+  :custom
+  (podcaster-directory "~/Music/Podcasts/")
+  :config
+  ;; Route playback through EMMS + mpv instead of itunes/ffplay
+  (when (fboundp 'emms-play-url)
+    (advice-add 'podcaster--play-podcast :override
+                (lambda (_ item)
+                  (let ((url (plist-get item :mp3-url)))
+                    (emms-play-url url)
+                    (run-hook-with-args 'podcaster-play-podcast-hook item))))))
+#+end_src
+
+* PDF Tools
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :straight t
+  :mode ("\\.pdf\\'" . pdf-view-mode)
+  :hook (pdf-view-mode-hook . (lambda () (display-line-numbers-mode -1)))
+  :config
+  (pdf-tools-install))
+#+end_src
+
+* Helpful
+#+begin_src emacs-lisp
+(use-package helpful
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key]      . helpful-key)
+  ([remap describe-command]  . helpful-command))
+#+end_src
+
+* Git
+#+begin_src emacs-lisp
+  (use-package magit)
+
+  (use-package magit-todos
+    :straight t
+    :after magit
+    :custom
+    (magit-todos-max-items 20)
+    (magit-todos-exclude-globs '(".git/" "node_modules/" "vendor/"))
+    :config
+    (magit-todos-mode 1))
+#+end_src
+
+* Forge
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit
+    :custom
+    (forge-alist '(("github.com" "github.com/api/v3" "github.com" forge-github-repository)))
+    (forge-owned-accounts '(("github.com" "damien-bafile")))
+    (forge-database-file (expand-file-name "forge-database.sqlite" user-emacs-directory))
+    (forge-add-default-bindings nil))
+#+end_src
+
+* Email
+#+begin_src emacs-lisp
+(use-package mu4e
+  :straight nil
+  :ensure nil
+  :load-path "/usr/share/emacs/site-lisp/mu4e"
+  :commands mu4e
+  :init
+  (setq mu4e-maildir "~/.local/share/mail"
+        mu4e-mu-binary (executable-find "mu")
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-update-interval 300
+        mu4e-headers-skip-duplicates t
+        mu4e-change-filenames-when-moving t
+        mu4e-attachment-dir "~/Downloads"
+        mu4e-compose-signature-auto-include nil
+        mu4e-confirm-quit nil
+        mu4e-context-policy 'pick-first
+        mu4e-compose-context-policy 'always-ask
+        message-kill-buffer-on-exit t
+        mail-user-agent 'mu4e-user-agent
+        sendmail-program (executable-find "msmtp")
+        message-sendmail-f-is-evil t
+        message-sendmail-extra-arguments '("--read-envelope-from")
+        message-send-mail-function 'message-send-mail-with-sendmail
+        send-mail-function 'message-send-mail-with-sendmail)
+  :config
+  (setq mu4e-contexts
+        (list
+         (make-mu4e-context
+          :name "gmail"
+          :match-func (lambda (msg) (when msg
+                                      (string-prefix-p "/gmail" (mu4e-message-field msg :maildir))))
+          :vars '((user-mail-address . "damnhatesyou@gmail.com")
+                  (user-full-name . "Damien Bafile")
+                  (mu4e-drafts-folder . "/gmail/[Gmail]/Drafts")
+                  (mu4e-sent-folder . "/gmail/[Gmail]/Sent Mail")
+                  (mu4e-trash-folder . "/gmail/[Gmail]/Trash")
+                  (mu4e-refile-folder . "/gmail/[Gmail]/All Mail"))))))
+
+(defun dashboard-insert-mu4e-mail (_list-size)
+  "Insert mu4e inbox unread count into the dashboard."
+  (let ((count (condition-case nil
+                   (let ((default-directory "~/.local/share/mail"))
+                     (with-temp-buffer
+                       (call-process "mu" nil t nil
+                                     "find" "maildir:/gmail/INBOX" "flag:unread")
+                       (count-lines (point-min) (point-max))))
+                 (error "?"))))
+    (dashboard-insert-heading "Email:")
+    (dashboard-insert-shortcut
+     (lambda (&rest _) (mu4e))
+     (format "Inbox (%s unread)" count)
+     "mail")))
+
+(with-eval-after-load 'dashboard
+  (add-to-list 'dashboard-item-generators
+                '(mu4e-mail . dashboard-insert-mu4e-mail)))
+#+end_src
+
+* Utilities
+#+begin_src emacs-lisp
+(defun my/project-run ()
+  "Run the current project based on its type.
+Rust:     cargo run
+PlatformIO: just deploy
+Python/uv:  prompt for uv run command
+CMake:      just run
+Leiningen: lein run"
+  (interactive)
+  (let ((root (projectile-project-root)))
+    (cond
+     ((and root (file-exists-p (expand-file-name "platformio.ini" root)))
+      (compile "just deploy"))
+     ((and root (file-exists-p (expand-file-name "Cargo.toml" root)))
+      (compile "cargo run"))
+     ((and root (file-exists-p (expand-file-name "project.clj" root)))
+      (compile "lein run"))
+     ((and root (file-exists-p (expand-file-name "uv.lock" root)))
+      (compile (read-shell-command "Run: " "uv run python main.py")))
+     ((and root (file-exists-p (expand-file-name "CMakeLists.txt" root)))
+      (compile "just run"))
+     (t
+      (projectile-compile-project nil)))))
+
+(defun my/project-build ()
+  "Build the current project based on its type.
+Rust:     cargo build
+PlatformIO: just build
+Python/uv:  uv sync
+CMake:      just build"
+  (interactive)
+  (let ((root (projectile-project-root)))
+    (cond
+     ((and root (file-exists-p (expand-file-name "platformio.ini" root)))
+      (compile "just build"))
+     ((and root (file-exists-p (expand-file-name "Cargo.toml" root)))
+      (compile "cargo build"))
+     ((and root (file-exists-p (expand-file-name "uv.lock" root)))
+      (compile "uv sync && uv build"))
+     ((and root (file-exists-p (expand-file-name "CMakeLists.txt" root)))
+      (compile "just build"))
+     (t
+      (projectile-compile-project nil)))))
+
+(defun my/reload-config ()
+  "Reload literate config.org."
+  (interactive)
+  (org-babel-load-file
+   (expand-file-name "config.org" user-emacs-directory))
+  (message "Config reloaded"))
+#+end_src
+
+* Matrix
+#+begin_src emacs-lisp
+(use-package ement
+  :straight t
+  :commands (ement-connect)
+  :custom
+  (ement-save-sessions t)
+  (ement-auto-sync t)
+  (ement-room-send-message-filter 'ement-room-send-org-filter))
+#+end_src
+
+* Org Mode
+#+begin_src emacs-lisp
+  (use-package org
+    :straight t
+    :hook ((org-mode . visual-line-mode)
+           (org-mode . org-indent-mode))
+    :custom
+    (org-directory "~/org")
+    (org-default-notes-file "~/org/inbox.org")
+    (org-agenda-files '("~/org"))
+    (org-log-done 'time)
+    (org-src-fontify-natively t)
+    (org-todo-keywords
+     '((sequence "TODO(true)" "IN-PROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+    (org-todo-keyword-faces
+     '(("TODO"        . (:foreground "red"    :weight bold))
+       ("IN-PROGRESS" . (:foreground "orange" :weight bold))
+       ("WAITING"     . (:foreground "yellow" :weight bold))
+       ("DONE"        . (:foreground "green"  :weight bold))
+       ("CANCELLED"   . (:foreground "gray"   :weight bold))))
+    (org-capture-templates
+     '(("t" "Todo"    entry (file+headline "~/org/inbox.org" "Tasks")
+        "* TODO %?\n  %i\n  %a")
+       ("n" "Note"    entry (file+headline "~/org/inbox.org" "Notes")
+        "* %?\n  %i\n  %a")
+       ("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
+        "* %?\nEntered on %U\n  %i\n  %a"))))
+
+  (use-package org-superstar
+    :after org
+    :hook (org-mode . org-superstar-mode))
+
+  (use-package org-download
+    :after org
+    :custom
+    (org-download-method 'directory)
+    (org-download-image-dir "~/org/images")
+    (org-download-heading-lvl nil))
+#+end_src
+
+* Org Roam
+#+begin_src emacs-lisp
+(use-package org-roam
+  :after org
+  :custom
+  (org-roam-directory "~/org/roam")
+  (org-roam-dailies-directory "daily/")
+  (org-roam-dailies-capture-templates
+   '(("d" "default" entry "* %?"
+      :target (file+head "%<%Y-%m-%d>.org"
+                         "#+title: %<%Y-%m-%d>\n"))))
+  :config
+  (org-roam-db-autosync-mode 1))
+#+end_src
+
+* ws-butler
+#+begin_src emacs-lisp
+  (use-package ws-butler
+    :straight (ws-butler :type git :host github :repo "lewang/ws-butler"
+                         :branch "master")
+    :hook (org-mode . ws-butler-mode))
+#+end_src
+
+* Session
+#+begin_src emacs-lisp
+(use-package recentf
+  :straight nil
+  :config
+  (recentf-mode 1)
+  :custom
+  (recentf-max-saved-items 100)
+  (recentf-max-menu-items 15))
+
+(use-package savehist
+  :straight nil
+  :config
+  (savehist-mode 1))
+
+(use-package saveplace
+  :straight nil
+  :config
+  (save-place-mode 1))
+
+(global-auto-revert-mode 1)
+(column-number-mode 1)
+#+end_src
+
+* Nix
+#+begin_src emacs-lisp
+(use-package nix-mode
+  :mode "\\.nix\\'"
+  :config
+  (add-hook 'nix-mode-hook #'lsp-deferred))
+#+end_src
+
+* Clojure
+#+begin_src emacs-lisp
+(use-package clojure-mode
+  :mode ("\\.clj\\'"  . clojure-mode)
+  :mode ("\\.cljs\\'" . clojure-mode)
+  :mode ("\\.cljc\\'" . clojure-mode)
+  :mode ("\\.edn\\'"  . clojure-mode)
+  :hook ((clojure-mode . lsp-deferred)
+         (clojure-mode . rainbow-delimiters-mode)))
+
+(use-package paredit
+  :hook (clojure-mode . paredit-mode))
+
+(use-package cider
+  :defer t
+  :hook ((cider-mode . company-mode)
+         (cider-repl-mode . company-mode))
+  :custom
+  (cider-repl-display-help-banner nil)
+  (cider-repl-result-prefix "=> ")
+  (cider-repl-use-clojure-font-lock t)
+  (cider-show-evaluation-spinner nil)
+  (cider-font-lock-dynamically '(macro core defined var-fallback)))
+#+end_src
